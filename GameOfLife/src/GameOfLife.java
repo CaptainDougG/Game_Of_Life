@@ -5,7 +5,10 @@ public class GameOfLife {
 	int columns;
 	boolean [][] game = null;
 	
-	public GameOfLife(int rows, int columns) {
+	public GameOfLife(int rows, int columns){
+		if (rows < 1 || columns < 1) {
+			throw new IllegalArgumentException("The rows and/or columns are out of bounds!");
+		}
 		this.rows = rows;
 		this.columns = columns;
 		game = new boolean[rows][columns];
@@ -21,7 +24,7 @@ public class GameOfLife {
 	
 	public boolean isAlive(int row, int column) {
 		boolean isAlive = false;
-		if (row > rows || row <= 0 || column > columns || column <= 0) {
+		if (row > rows || row < 0 || column > columns || column < 0) {
 			isAlive = false;
 		}
 		else {
@@ -66,11 +69,12 @@ public class GameOfLife {
 	}
 	
 	public void calculateNextGeneration() {
-		for (int row = 0; row < game.length; row++) {
-			for (int col = 0; col <game[row].length; col++) {
+		for (int row = 1; row < game.length; row++) {
+			for (int col = 1; col < game[row].length; col++) {
 				if (isAlive(row, col) == true) {
 					if (getNeighbourCount(row, col) <= 1 || getNeighbourCount(row, col) >= 4) {
 						game[row][col] = false;
+						continue;
 					}
 					if (getNeighbourCount(row, col) == 2 || getNeighbourCount(row, col) == 3) {
 						game[row][col] = true;
@@ -80,12 +84,25 @@ public class GameOfLife {
 					if (getNeighbourCount(row, col) == 3) {
 						game[row][col] = true;
 					}
-					else {
-						game[row][col] = false;
-					}
 				}
 			}
 	}
 	
+	}
+	
+	public String toString() {
+		String textPrint = "";
+		for (int row = 0; row < game.length; row++) {
+			for (int col = 0; col <game[row].length; col++) {
+				if (isAlive(row, col) == true) {
+					textPrint += "*";
+				}
+				if (isAlive(row, col) == false) {
+					textPrint += " ";
+				}
+			}
+			textPrint += "\r\n";
+		}
+		return textPrint;
 	}
 }
