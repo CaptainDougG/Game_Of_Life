@@ -32,8 +32,8 @@ public class GameOfLife {
 		
 	}
 	
-	public static void setAlive(int row, int column, boolean life) {
-
+	public void setAlive(int row, int column, boolean life) {
+		game[row][column] = life;
 	}
 	
 	public int getNeighbourCount(int row, int column) {
@@ -41,10 +41,51 @@ public class GameOfLife {
 		if (isAlive(row-1, column-1)) {
 			 neighbours += 1;
 		}
+		if (isAlive(row-1, column)) {
+			 neighbours += 1;
+		}
+		if (isAlive(row-1, column+1)) {
+			 neighbours += 1;
+		}
+		if (isAlive(row, column-1)) {
+			 neighbours += 1;
+		}
+		if (isAlive(row, column+1)) {
+			 neighbours += 1;
+		}
+		if (isAlive(row+1, column-1)) {
+			 neighbours += 1;
+		}
+		if (isAlive(row+1, column)) {
+			 neighbours += 1;
+		}
+		if (isAlive(row+1, column+1)) {
+			 neighbours += 1;
+		}
+		return neighbours;
 	}
 	
-	public static void calculateNextGeneration() {
-		
+	public void calculateNextGeneration() {
+		for (int row = 0; row < game.length; row++) {
+			for (int col = 0; col <game[row].length; col++) {
+				if (isAlive(row, col) == true) {
+					if (getNeighbourCount(row, col) <= 1 || getNeighbourCount(row, col) >= 4) {
+						game[row][col] = false;
+					}
+					if (getNeighbourCount(row, col) == 2 || getNeighbourCount(row, col) == 3) {
+						game[row][col] = true;
+					}
+				}
+				if (isAlive(row, col) == false) {
+					if (getNeighbourCount(row, col) == 3) {
+						game[row][col] = true;
+					}
+					else {
+						game[row][col] = false;
+					}
+				}
+			}
 	}
 	
+	}
 }
