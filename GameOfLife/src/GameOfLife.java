@@ -86,8 +86,7 @@ public class GameOfLife {
 					}
 				}
 			}
-	}
-	
+		}
 	}
 	
 	public String toString() {
