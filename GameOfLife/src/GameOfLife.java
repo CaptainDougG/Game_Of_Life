@@ -3,7 +3,8 @@ public class GameOfLife {
 	
 	int rows;
 	int columns;
-	boolean [][] game = null;
+	boolean [][] curGen = null;
+	boolean [][] newGen = null;
 	
 	public GameOfLife(int rows, int columns){
 		if (rows < 1 || columns < 1) {
@@ -11,7 +12,8 @@ public class GameOfLife {
 		}
 		this.rows = rows;
 		this.columns = columns;
-		game = new boolean[rows][columns];
+		curGen = new boolean[rows][columns];
+		newGen = new boolean [rows][columns];
 	}
 	
 	public int getRows() {
@@ -24,11 +26,11 @@ public class GameOfLife {
 	
 	public boolean isAlive(int row, int column) {
 		boolean isAlive = false;
-		if (row > rows || row < 0 || column > columns || column < 0) {
+		if (row >= rows || row < 0 || column >= columns || column < 0) {
 			isAlive = false;
 		}
 		else {
-			isAlive = game[row][column];
+			isAlive = curGen[row][column];
 		}
 		
 		return isAlive;
@@ -36,7 +38,9 @@ public class GameOfLife {
 	}
 	
 	public void setAlive(int row, int column, boolean life) {
-		game[row][column] = life;
+		if(row < rows && row >= 0 && column < columns && column >= 0) {
+			curGen[row][column] = life;
+		}
 	}
 	
 	public int getNeighbourCount(int row, int column) {
@@ -69,30 +73,34 @@ public class GameOfLife {
 	}
 	
 	public void calculateNextGeneration() {
-		for (int row = 1; row < game.length; row++) {
-			for (int col = 1; col < game[row].length; col++) {
+		newGen = new boolean[rows][columns];
+		boolean [][]temp = null;
+		for (int row = 0; row < curGen.length; row++) {
+			for (int col = 0; col < curGen[row].length; col++) {
 				if (isAlive(row, col) == true) {
 					if (getNeighbourCount(row, col) <= 1 || getNeighbourCount(row, col) >= 4) {
-						game[row][col] = false;
+						newGen[row][col] = false;
 						continue;
 					}
 					if (getNeighbourCount(row, col) == 2 || getNeighbourCount(row, col) == 3) {
-						game[row][col] = true;
+						newGen[row][col] = true;
 					}
 				}
 				if (isAlive(row, col) == false) {
 					if (getNeighbourCount(row, col) == 3) {
-						game[row][col] = true;
+						newGen[row][col] = true;
 					}
 				}
 			}
 		}
+		temp = curGen;
+		curGen = newGen;
 	}
 	
 	public String toString() {
 		String textPrint = "";
-		for (int row = 0; row < game.length; row++) {
-			for (int col = 0; col <game[row].length; col++) {
+		for (int row = 0; row < curGen.length; row++) {
+			for (int col = 0; col <curGen[row].length; col++) {
 				if (isAlive(row, col) == true) {
 					textPrint += "*";
 				}
