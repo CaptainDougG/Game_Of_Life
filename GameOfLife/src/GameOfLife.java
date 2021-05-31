@@ -73,28 +73,30 @@ public class GameOfLife {
 	}
 	
 	public void calculateNextGeneration() {
-		newGen = new boolean[rows][columns];
 		boolean [][]temp = null;
 		for (int row = 0; row < curGen.length; row++) {
 			for (int col = 0; col < curGen[row].length; col++) {
 				if (isAlive(row, col) == true) {
 					if (getNeighbourCount(row, col) <= 1 || getNeighbourCount(row, col) >= 4) {
 						newGen[row][col] = false;
-						continue;
 					}
-					if (getNeighbourCount(row, col) == 2 || getNeighbourCount(row, col) == 3) {
+					else {
 						newGen[row][col] = true;
 					}
 				}
-				if (isAlive(row, col) == false) {
+				else {
 					if (getNeighbourCount(row, col) == 3) {
 						newGen[row][col] = true;
+					}
+					else {
+						newGen[row][col] = false;
 					}
 				}
 			}
 		}
 		temp = curGen;
 		curGen = newGen;
+		newGen = temp;
 	}
 	
 	public String toString() {
